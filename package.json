@@ -1,0 +1,22 @@
+{
+  "name": "pnpmft",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "pnpm -C vuethree dev",
+    "dev:two": "pnpm -C vuetwo dev",
+    "serve": "pnpm -C serve serve",
+    "build": "pnpm -C packages/anchorpoint build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.1.1",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "ft-burypoint": "workspace:^1.0.0"
+  }
+}

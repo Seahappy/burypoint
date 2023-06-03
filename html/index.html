@@ -1,0 +1,83 @@
+<!--
+ * @Description: 
+ * @Author: Cxy
+ * @Date: 2023-05-10 14:36:54
+ * @LastEditors: Cxy
+ * @LastEditTime: 2023-05-17 16:22:21
+ * @FilePath: \futian\pnpmft\html\index.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../node_modules/ft-burypoint/htmlBP.js" type="text/javascript"></script>
+    <style>
+        div {
+            height: 100px;
+            background: #000;
+
+        }
+
+        .active {
+            background: #1228b7;
+        }
+    </style>
+</head>
+
+
+<body>
+    <button onclick="btn()">btn</button>
+    <button onclick="jump()">changeHash</button>
+
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div>
+        <div>
+            <div>
+            </div>
+        </div>
+    </div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div style="background-color: #1228b7;" class="box"></div>
+</body>
+
+<script>
+    const buryPoint = new FTBP({
+        url: 'http://localhost:1314',
+        defaultPath: 'point'
+    })
+    const btn = () => {
+        buryPoint.ftClick({ a: 1 }, 'login', 'http://localhost:1314')
+    }
+
+    window.addEventListener('popstate', function (e) {
+        console.log(e);
+    });
+
+    const jump = () => {
+        location.href = 'http://127.0.0.1:5500/pnpmft/html/index.html#/a'
+    }
+
+    buryPoint.ftVisiblePage(document.getElementsByClassName('box')[0], ({ time }, cb) => {
+        cb({ time, bbb: 123 }, 'login')
+    })
+</script>
+
+
+</html>

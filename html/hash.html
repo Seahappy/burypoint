@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <script src="../node_modules/ft-burypoint"></script>
+    <style>
+        .flex-box {
+            display: flex;
+        }
+
+        .flex1 {
+            flex: 1;
+        }
+
+        .center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .box {
+            height: 100px;
+        }
+
+        .route {
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box flex-box">
+        <span onclick="hash('/1')" class="flex1 center route">home</span>
+        <span onclick="hrerNew()" class="flex1 center route">shop</span>
+        <span onclick="historyR('/3')" class="flex1 center route">shopcar</span>
+        <span onclick="hrer()" class="flex1 center route">usercenter</span>
+    </div>
+    <button onclick="hisGo()">hisGo</button>
+    <button onclick="hisBack()">hisBack</button>
+    <button onclick="hisForward()">hisForward</button>
+</body>
+<script>
+    const buryPoint = new FTBP.default({
+        url: 'http://localhost:1314',
+        defaultPath: 'point'
+    })
+    buryPoint.BPVisits({ vv: 123 }, 'login')
+    buryPoint.BPTimePage((dp, cb) => {
+        cb({path1: dp.from.hash.split('#')[1], gg: 1, time: dp.time }, 'login')
+    })
+    const hash = (path) => {
+        buryPoint.BPClick({ ll: 888 })
+        location.hash = path
+    }
+    const hrerNew = () => {
+        location.href = 'http://127.0.0.1:5500/pnpmBP/html/index.html'
+    }
+    const historyR = (path) => {
+        history.pushState({}, '', 'http://127.0.0.1:5500/pnpmBP/html/hash.html#/3111')
+        // history.replaceState({}, '', 'http://127.0.0.1:5500/pnpmBP/html/hash.html#/3')
+    }
+    const hrer = () => {
+        location.href = 'http://127.0.0.1:5500/pnpmBP/html/hash.html#/4'
+    }
+
+    const hisGo = () => {
+        history.go(1)
+    }
+    const hisBack = () => {
+        history.back()
+    }
+    const hisForward = () => {
+        history.forward()
+    }
+
+</script>
+
+</html>

@@ -1,0 +1,6 @@
+packages:
+  - packages/*
+  - vuetwo
+  - vuethree
+  - html
+  - serve
