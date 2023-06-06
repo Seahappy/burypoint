@@ -1,6 +1,6 @@
 import type { OptionsInter } from './type'
 
-const request = ({ url, defaultPath = '' }: OptionsInter, path: string = defaultPath, data: Object, hostUrl: string = '') => {
+const request = ({ url, defaultPath }: OptionsInter, path: string = defaultPath, data: Object, hostUrl: string = '') => {
     const interStr = (hostUrl || url) + '/' + path
     const pathStr = objectToPath(data)
     if (navigator.sendBeacon) {

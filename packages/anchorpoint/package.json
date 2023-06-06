@@ -4,26 +4,41 @@
   "description": "埋点工具包",
   "main": "dist/index.es.js",
   "module": "dist/index.es.js",
-  "browser": "dist/index.umd.js",
   "unpkg": "dist/index.umd.js",
+  "jsdelivr": "dist/index.umd.js",
   "types": "dist/types/index.d.ts",
   "scripts": {
     "clean:dist": "rimraf dist",
     "build:types": "pnpm run clean:dist && tsc -b ./tsconfig.types.json",
-    "copy": "node --loader ts-node/esm copy.ts",
+    "copy": "ts-node copy.ts",
     "build": "pnpm run build:types && rollup --config rollup.config.ts --configPlugin typescript2 && pnpm run copy"
   },
-  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": "./index.es.js",
+      "require": "./index.umd.js"
+    }
+  },
   "keywords": [
     "burying point",
     "tool",
     "埋点"
   ],
-  "author": "",
+  "author": "seahappy",
   "license": "MIT",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Seahappy/ft-burypoint.git"
+  },
+  "homepage": "https://github.com/Seahappy/ft-burypoint/blob/main/README.md",
+  "files": [
+    "dist/*"
+  ],
   "devDependencies": {
     "@babel/core": "^7.22.1",
     "@babel/preset-env": "^7.22.4",
@@ -32,10 +47,13 @@
     "@rollup/plugin-terser": "^0.4.3",
     "rimraf": "^5.0.1",
     "rollup": "^3.22.0",
-    "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-typescript2": "^0.34.1",
     "ts-node": "^10.9.1",
     "tslib": "^2.5.2"
   },
-  "browserslist": "> 0.25%, not dead"
+  "browserslist": "> 0.25%, not dead",
+  "engines": {
+    "node": ">=12",
+    "pnpm": ">5"
+  }
 }
