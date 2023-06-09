@@ -1,7 +1,12 @@
 export type OptionsInter = {
-    url: string,
-    defaultPath: string,
+    url: string
+    defaultPath: string
     visAreaThreshold?: number
+    accountNumber?: string 
+    uniqueIDConfig?: {
+        key?: string
+        value?: string
+    }
 }
 
 export type BindInter = {

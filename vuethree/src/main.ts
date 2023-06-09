@@ -12,7 +12,10 @@ app.use(router)
 app.use(buryPoint, router, {
     url: 'http://localhost:1314',
     defaultPath: 'point',
-    VisAreaThreshold: 0.2
+    visAreaThreshold: 0.2,
+    uniqueIDConfig: {
+        key: "ppid"
+    }
 })
 
 app.mount('#app')

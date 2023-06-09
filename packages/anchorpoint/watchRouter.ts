@@ -15,9 +15,10 @@ class watchRouter {
     addStateListener() {
         const listener = (type: string) => {
             const orig = (history as FtHistory)[type];
-            return () => {
-                const rv: Function = orig.apply(this);
-                const e: Event = new Event(type);
+            return function () {
+                const rv: Function = orig.apply(this, arguments);
+                const e = (new Event(type) as FtEvent);
+                e.arguments = arguments;
                 window.dispatchEvent(e);
                 return rv;
             };

@@ -4,6 +4,14 @@ const $BPTimePage = getCurrentInstance()?.appContext.config.globalProperties.$BP
 $BPTimePage((dp: any, cb: Function) => {
     cb({ c: 1, time: dp.time })
 })
+
+const $BPUpdateOptions = getCurrentInstance()?.appContext.config.globalProperties.$BPUpdateOptions
+$BPUpdateOptions({
+  // uniqueIDConfig: {
+  //   value: "123"
+  // },
+  accountNumber: "asd"
+})
 </script>
 <template>
     b

@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <script src="../node_modules/ft-burypoint"></script>
+    <script src="../node_modules/ft-burypoint/dist/index.umd.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style>
         .flex-box {
             display: flex;
@@ -42,15 +43,27 @@
     <button onclick="hisGo()">hisGo</button>
     <button onclick="hisBack()">hisBack</button>
     <button onclick="hisForward()">hisForward</button>
+    <div id="app">{{ message }}</div>
 </body>
 <script>
-    const buryPoint = new FTBP.default({
+    const { createApp } = Vue
+
+    const app = createApp({
+        data() {
+            return {
+                message: 'Hello Vue!'
+            }
+        }
+    }).mount('#app')
+    console.log(app.use);
+    console.log(FTBP);
+    const buryPoint = new FTBP({
         url: 'http://localhost:1314',
         defaultPath: 'point'
     })
     buryPoint.BPVisits({ vv: 123 }, 'login')
     buryPoint.BPTimePage((dp, cb) => {
-        cb({path1: dp.from.hash.split('#')[1], gg: 1, time: dp.time }, 'login')
+        cb({ path1: dp.from.hash.split('#')[1], gg: 1, time: dp.time }, 'login')
     })
     const hash = (path) => {
         buryPoint.BPClick({ ll: 888 })

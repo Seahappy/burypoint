@@ -9,15 +9,16 @@
   "types": "dist/types/index.d.ts",
   "scripts": {
     "clean:dist": "rimraf dist",
-    "build:types": "pnpm run clean:dist && tsc -b ./tsconfig.types.json",
+    "rollup": "pnpm run clean:dist && rollup --config rollup.config.ts --configPlugin typescript2",
+    "build:types": "tsc -b ./tsconfig.types.json",
     "copy": "ts-node copy.ts",
-    "build": "pnpm run build:types && rollup --config rollup.config.ts --configPlugin typescript2 && pnpm run copy"
+    "build": "pnpm run rollup && pnpm run build:types && pnpm run copy"
   },
   "exports": {
     ".": {
-      "types": "./types/index.d.ts",
-      "import": "./index.es.js",
-      "require": "./index.umd.js"
+      "types": "./dist/types/index.d.ts",
+      "import": "./index.ts",
+      "require": "./dist/index.umd.js"
     }
   },
   "keywords": [
