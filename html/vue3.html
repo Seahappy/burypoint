@@ -7,23 +7,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue-router@4"></script>
 </head>
 
 <body>
 
-    <div id="app">{{ message }}</div>
+    <div id="app">
+        <h1>Hello App!</h1>
+        <p>
+            <!--使用 router-link 组件进行导航 -->
+            <!--通过传递 `to` 来指定链接 -->
+            <!--`<router-link>` 将呈现一个带有正确 `href` 属性的 `<a>` 标签-->
+            <router-link to="/">Go to Home</router-link>
+            <router-link to="/about">Go to About</router-link>
+        </p>
+        <!-- 路由出口 -->
+        <!-- 路由匹配到的组件将渲染在这里 -->
+        <router-view></router-view>
+    </div>
 
     <script>
         const { createApp } = Vue
-
-        const app = createApp({
-            data() {
-                return {
-                    message: 'Hello Vue!'
-                }
+        const app = createApp({})
+        const Home = {
+            template: '<div v-BPClick="{b: 2}">Home</div>', created() {
+                // 浏览时间
+                const buryPoint = app.config.globalProperties
+                buryPoint.$BPTimePage((dp, cb) => {
+                    cb({ a: 1, time: dp.time })
+                })
             }
-        }).mount('#app')
-        app.use()
+        }
+        const About = { template: '<div>About</div>' }
+        const routes = [
+            { path: '/', component: Home },
+            { path: '/about', component: About },
+        ]
+        const router = VueRouter.createRouter({
+            // 4. 内部提供了 history 模式的实现。为了简单起见，我们在这里使用 hash 模式。
+            history: VueRouter.createWebHashHistory(),
+            routes, // `routes: routes` 的缩写
+        })
+        app.use(router)
+        app.use(FTBP.buryPoint, router, {
+            url: 'http://localhost:1314',
+            defaultPath: 'point',
+            visAreaThreshold: 0.2,
+            uniqueIDConfig: {
+                key: "ppid"
+            }
+        })
+        app.mount('#app')
+        console.log(FTBP);
     </script>
 </body>
 

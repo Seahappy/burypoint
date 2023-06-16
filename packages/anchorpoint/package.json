@@ -1,9 +1,9 @@
 {
   "name": "ft-burypoint",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "埋点工具包",
-  "main": "dist/index.es.js",
-  "module": "dist/index.es.js",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
   "unpkg": "dist/index.umd.js",
   "jsdelivr": "dist/index.umd.js",
   "types": "dist/types/index.d.ts",
@@ -17,7 +17,7 @@
   "exports": {
     ".": {
       "types": "./dist/types/index.d.ts",
-      "import": "./index.ts",
+      "import": "./dist/index.js",
       "require": "./dist/index.umd.js"
     }
   },

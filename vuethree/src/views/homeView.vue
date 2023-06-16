@@ -11,7 +11,7 @@ $BPVisits({ c: 1 })
 const router = useRouter()
 const route = useRoute()
 const changeR = () => {
-  router.push(route.path === '/a' ? '/b' : '/a')
+  router.push(route.path === '/a' ? '/b?a=2' : '/a')
 }
 </script>
 
@@ -41,7 +41,7 @@ const changeR = () => {
     <div>
       <div>
         <div>
-          <div style="background-color: aqua;" v-BPVisiblePage="{ a: 1 }"></div>
+          <div style="background-color: aqua;" v-BPVisiblePage:ccc="{ a: 1 }"></div>
         </div>
       </div>
     </div>

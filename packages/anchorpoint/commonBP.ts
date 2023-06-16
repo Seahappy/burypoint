@@ -1,14 +1,17 @@
 import request from './request'
 import type { OptionsInter, SubVisiblePageInter, FtElement } from './type'
-import watchRouter from './watchRouter'
+import htmlRouter from './watchRouter/htmlRouter'
+import vueRouter from './watchRouter/vueRouter'
+import wxRouter from './watchRouter/wxRouter'
 import { mergeObj, useStorage, getUuid } from './utils'
+import vueBP from './vueBP'
+declare const wx: any;
 
 class FTBP {
-    app: any
     options: OptionsInter = {
-        url: "",
-        defaultPath: "",
-        uniqueIDConfig: { value: "" }
+        url: '',
+        defaultPath: '',
+        uniqueIDConfig: { value: '' }
     }
     storageName = 'bpuuid'
     subVisits: Array<{ data: Object; path?: string; url?: string }> = []
@@ -16,13 +19,33 @@ class FTBP {
     timeRecorder: number = Date.now()
     interOb: IntersectionObserver | undefined
     subVisiblePage: SubVisiblePageInter = {}
-    vueRouter: any
-    constructor(options: OptionsInter, app: any, vueRouter: any) {
+    constructor(options: OptionsInter, app: any, routes: any) {
         this.BPUpdateOptions(options)
-        this.app = app
-        app && (this.vueRouter = vueRouter)
-        app ? this.watchVueRouter() : this.watchHtmlRouter()
+        this.watchRouter(app, routes)
         this.watchPosiEvent()
+    }
+
+    static buryPoint = {
+        install: (app: any, vueRouter: any, options: OptionsInter) => {
+            const buryingPoint = new FTBP(options, app, vueRouter)
+            vueBP(app, buryingPoint)
+            const vueCase = typeof app === 'function' ? app.prototype : app.config.globalProperties
+            vueCase.$BPClick = (data: Object, path?: string, url?: string) => {
+                buryingPoint.BPClick(data, path, url)
+            }
+            vueCase.$BPVisits = (data: Object, path?: string, url?: string) => {
+                buryingPoint.BPVisits(data, path, url)
+            }
+            vueCase.$BPTimePage = (cb: Function) => {
+                buryingPoint.BPTimePage(cb)
+            }
+            vueCase.$BPVisiblePage = (el: FtElement, cb: Function) => {
+                buryingPoint.BPVisiblePage(el, cb)
+            }
+            vueCase.$BPUpdateOptions = (options: OptionsInter) => {
+                buryingPoint.BPUpdateOptions(options)
+            }
+        }
     }
 
     BPUpdateOptions(options: OptionsInter) {
@@ -43,13 +66,13 @@ class FTBP {
                     }
                 }
                 useStorage.setStorage(storageName, uuidData)
-                this.options.uniqueIDConfig.value = uuidData[options.accountNumber]
+                this.options.uniqueIDConfig && (this.options.uniqueIDConfig.value = uuidData[options.accountNumber])
             } else {
                 if (!uuidData['temporUuid']) {
                     uuidData['temporUuid'] = getUuid()
                     useStorage.setStorage(storageName, uuidData)
                 }
-                this.options.uniqueIDConfig.value = uuidData['temporUuid']
+                this.options.uniqueIDConfig && (this.options.uniqueIDConfig.value = uuidData['temporUuid'])
             }
         }
         this.options = mergeObj(this.options, options)
@@ -59,25 +82,17 @@ class FTBP {
         request(this.options, path, data, url)
     }
 
-    watchVueRouter() {
-        this.vueRouter.afterEach((to: any, from: any) => {
-            this.subVisits.forEach(({ path, data, url }) => {
-                request(this.options, path, data, url)
-            })
-            this.loopTimePage(to, from)
-        })
-        window.addEventListener('beforeunload', () => {
-            this.loopTimePage(null, history.state)
-        })
-    }
-
-    watchHtmlRouter() {
-        const router = new watchRouter();
+    watchRouter(app: any, routes: any) {
+        let router;
+        if (typeof wx === 'object') {
+            router = new wxRouter()
+        } else if (app) {
+            router = new vueRouter(routes)
+        } else {
+            router = new htmlRouter();
+        }
         router.on((to: any, from: any) => {
-            this.subVisits.forEach(({ path, data, url }) => {
-                request(this.options, path, data, url)
-                this.loopTimePage(to, from)
-            })
+            this.loopVisTimePage(to, from)
         });
     }
 
@@ -94,7 +109,10 @@ class FTBP {
         this.subTimePage = []
     }
 
-    loopTimePage(to: any, from: any) {
+    loopVisTimePage(to: any, from: any) {
+        this.subVisits.forEach(({ path, data, url }) => {
+            request(this.options, path, data, url)
+        })
         const currentTime = Date.now()
         this.subTimePage.forEach(cb => {
             cb({ to, from, time: currentTime - this.timeRecorder }, (data: Object, path?: string, url?: string) => {

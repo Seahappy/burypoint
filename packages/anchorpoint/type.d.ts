@@ -2,11 +2,12 @@ export type OptionsInter = {
     url: string
     defaultPath: string
     visAreaThreshold?: number
-    accountNumber?: string 
+    accountNumber?: string
     uniqueIDConfig?: {
         key?: string
         value?: string
     }
+    commonParam?: object
 }
 
 export type BindInter = {
@@ -30,4 +31,8 @@ export type FtHistory = History & {
 
 export type FtEvent = Event & {
     arguments: IArguments
+}
+
+export type FtLocation = Location & {
+    path: string
 }

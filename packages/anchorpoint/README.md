@@ -1,13 +1,41 @@
 ## burypoint 埋点工具包
 
-### HTML
-```javascript
-// 初始化埋点
-const buryPoint = new FTBP.default({
-    url: 上报地址,
-    defaultPath: 默认接口,
-    visAreaThreshold: 内容可见比例
+### CDN
+Using jsDelivr CDN (ES5 UMD browser module):
+```html
+<script src="https://cdn.jsdelivr.net/npm/ft-burypoint@2.0.0/index.umd.js"></script>
+```
+Using unpkg CDN:
+```html
+<script src="https://unpkg.com/ft-burypoint@2.0.0/index.umd.js"></script>
+```
+
+### 参数
+> new FTBP(config)
+```js
+new FTBP({
+    url: string  // ip
+    defaultPath: string // 默认接口
+    visAreaThreshold?: number // 可视DOM阈值
+    accountNumber?: string // 账号
+    uniqueIDConfig?: { 
+        key?: string // 唯一值key
+        value?: string // 值
+    }
+    commonParam?: object // 通用参数
 })
+```
+
+### 方法
+- BPClick(data, interface)：事件
+- BPVisits(data, interface)：页面浏览
+- BPTimePage((data, callback) => { callback(data, interface) })：页面浏览时间
+- BPVisiblePage((data, callback) => { callback(data, interface) })：内容可见
+
+### 例子
+```javascript
+// HTML
+const buryPoint = new FTBP(config)
 // 点击上报
 buryPoint.BPClick(上报内容, 接口)
 // 浏览次数
@@ -20,17 +48,10 @@ buryPoint.BPTimePage((dp, cb) => {
 buryPoint.BPVisiblePage(dom, ({ time }, cb) => {
     cb({ time, 上报内容 }, 接口)
 })
-```
 
-### VUE2
-```javascript
-// main
+// VUE2 实例挂在了vue原型上
 import { buryPoint } from 'ft-burypoint'
-Vue.use(buryPoint, router, {
-    url: 上报地址,
-    defaultPath: 默认接口,
-    visAreaThreshold: 内容可见比例
-})
+Vue.use(buryPoint, router, config)
 // 点击上报
 this.$BPClick(上报内容, 接口)
 // 浏览次数
@@ -44,23 +65,9 @@ this.$BPVisiblePage(dom, ({ time }, cb) => {
     cb({ time, 上报内容 }, 接口)
 })
 
-// 指令
-// 点击上报
-<button v-BPClick:接口="上报内容"></button>
-// 内容可见上报
-<div v-BPVisiblePage:接口="上报内容"></div>
-```
-
-### VUE3
-```javascript
-// main
+// VUE3 实例挂在了globalProperties上
 import { buryPoint } from 'ft-burypoint'
-Vue.use(buryPoint, router, {
-    url: 上报地址,
-    defaultPath: 默认接口,
-    visAreaThreshold: 内容可见比例
-})
-
+app.use(buryPoint, router, config)
 // 组合式API
 import { getCurrentInstance } from 'vue'
 const buryPoint = getCurrentInstance()?.appContext.config.globalProperties
@@ -77,6 +84,9 @@ buryPoint.$BPVisiblePage(dom, ({ time }, cb) => {
     cb({ time, 上报内容 }, 接口)
 })
 
-// 选项API 与VUE2 一致
-// 指令 与VUE2 一致
+// 指令
+// 点击上报
+<button v-BPClick:接口='上报内容'></button>
+// 内容可见上报
+<div v-BPVisiblePage:接口='上报内容'></div>
 ```
